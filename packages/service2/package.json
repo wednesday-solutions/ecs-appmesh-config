@@ -1,0 +1,19 @@
+{
+  "name": "service2",
+  "version": "1.0.0",
+  "description": "",
+  "type": "module",
+  "main": "server/index.js",
+  "author": "Nikhil",
+  "scripts": {
+    "start:local": "export ENVIRONMENT_NAME=local && nodemon",
+    "start:production": "export ENVIRONMENT_NAME=production && node server/index.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}

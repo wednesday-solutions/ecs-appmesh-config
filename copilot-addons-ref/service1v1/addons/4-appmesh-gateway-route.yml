@@ -1,0 +1,51 @@
+Parameters:
+  App:
+    Type: String
+  Env:
+    Type: String
+  Name:
+    Type: String
+Resources:
+  AppMeshVirtualGateway:
+    Type: 'AWS::AppMesh::VirtualGateway'
+    Properties:
+      MeshName: !GetAtt Mesh.MeshName
+      VirtualGatewayName: VIRTUAL_GATEWAY_NAME
+      Spec:
+        BackendDefaults:
+          ClientPolicy: {}
+        Listeners:
+          - PortMapping:
+              Port: 9080
+              Protocol: http
+        Logging: {}
+
+  Service1GatewayRoute:
+    Type: 'AWS::AppMesh::GatewayRoute'
+    DependsOn: AppMeshVirtualGateway
+    Properties:
+      MeshName: MESH_NAME
+      VirtualGatewayName: VIRTUAL_GATEWAY_NAME
+      GatewayRouteName: GATEWAY_ROUTE
+      Spec:
+        HttpRoute:
+          Action:
+            Rewrite:
+              Hostname:
+                DefaultTargetHostname: ENABLED
+              Prefix:
+                DefaultPrefix: ENABLED
+            Target:
+              VirtualService:
+                VirtualServiceName: !GetAtt Service1VirtualService.VirtualServiceName
+          Match:
+            Prefix: GATEWAY_PREFIX
+Outputs:
+  Service1GatewayRoute:
+    Value: !GetAtt Service1GatewayRoute.Arn
+    Export:
+      Name: Service1GatewayRoute # This value can be consumed by a workload manifest or a workload addon.
+  AppMeshVirtualGateway:
+    Value: !Ref AppMeshVirtualGateway
+    Export:
+      Name: AppMeshVirtualGateway # This value can be consumed by a workload manifest or a workload addon.

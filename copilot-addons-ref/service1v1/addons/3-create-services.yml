@@ -1,0 +1,99 @@
+Parameters:
+    App:
+        Type: String
+    Env:
+        Type: String
+    Name:
+        Type: String
+    ContainerPort:
+        Type: Number
+        Default: 8080
+
+Resources:
+  Service1v1VirtualNode:
+    Type: AWS::AppMesh::VirtualNode
+    Properties:
+      MeshName: !GetAtt Mesh.MeshName
+      VirtualNodeName: VIRTUAL_NODE1_NAME
+      Spec:
+        Listeners:
+          - PortMapping:
+              Port: SERVICE1_PORT
+              Protocol: http
+        ServiceDiscovery:
+          DNS:
+            Hostname: SERVICE1_DNS_DISCOVERY_ENDPOINT
+
+  Service1v2VirtualNode:
+    Type: AWS::AppMesh::VirtualNode
+    Properties:
+      MeshName: !GetAtt Mesh.MeshName
+      VirtualNodeName: VIRTUAL_NODE2_NAME
+      Spec:
+        Listeners:
+          - PortMapping:
+              Port: SERVICE2_PORT
+              Protocol: http
+        ServiceDiscovery:
+          DNS:
+            Hostname: SERVICE2_DNS_DISCOVERY_ENDPOINT
+
+  Service1VirtualService:
+    Type: AWS::AppMesh::VirtualService
+    Properties:
+      MeshName: !GetAtt Mesh.MeshName
+      VirtualServiceName: VIRTUAL_SERVICE_NAME
+      Spec:
+        Provider:
+          VirtualRouter:
+            VirtualRouterName: !GetAtt Service1VirtualRouter.VirtualRouterName
+
+  Service1VirtualRouter:
+    Type: AWS::AppMesh::VirtualRouter
+    Properties:
+      MeshName: !GetAtt Mesh.MeshName
+      VirtualRouterName: VIRTUAL_ROUTER_NAME
+      Spec:
+        Listeners:
+          - PortMapping:
+              Port: !Ref ContainerPort
+              Protocol: http
+
+  Service1Route:
+    Type: AWS::AppMesh::Route
+    Properties:
+      MeshName: !GetAtt Mesh.MeshName
+      VirtualRouterName: !GetAtt Service1VirtualRouter.VirtualRouterName
+      RouteName: VIRTUAL_ROUTER_ROUTE_NAME
+      Spec:
+        HttpRoute:
+          Match:
+            Prefix: '/'
+          Action:
+            WeightedTargets:
+              - VirtualNode: !GetAtt Service1v1VirtualNode.VirtualNodeName
+                Weight: VIRTUAL_NODE1_WEIGHT
+              - VirtualNode: !GetAtt Service1v2VirtualNode.VirtualNodeName
+                Weight: VIRTUAL_NODE2_WEIGHT
+
+Outputs:
+    Service1v1VirtualNode:
+        Value: !Ref Service1v1VirtualNode
+        Export:
+            Name: Service1v1VirtualNode  # This value can be consumed by a workload manifest or a workload addon.
+    Service1v2VirtualNode:
+        Value: !Ref Service1v2VirtualNode
+        Export:
+            Name: Service1v2VirtualNode  # This value can be consumed by a workload manifest or a workload addon.
+    Service1Route:
+        Value: !Ref Service1Route
+        Export:
+            Name: Service1Route  # This value can be consumed by a workload manifest or a workload addon.
+    Service1VirtualRouter:
+        Value: !Ref Service1VirtualRouter
+        Export:
+            Name: Service1VirtualRouter  # This value can be consumed by a workload manifest or a workload addon.
+    Service1VirtualService:
+        Value: !Ref Service1VirtualService
+        Export:
+            Name: Service1VirtualService  # This value can be consumed by a workload manifest or a workload addon.

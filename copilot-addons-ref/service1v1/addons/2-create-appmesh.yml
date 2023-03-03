@@ -1,0 +1,26 @@
+Parameters:
+    App:
+        Type: String
+    Env:
+        Type: String
+    Name:
+        Type: String
+
+Resources:
+    Mesh:
+        Type: AWS::AppMesh::Mesh
+        Properties:
+            MeshName: MESH_NAME
+
+#   AppMeshHostedZone:
+#       Type: AWS::Route53::HostedZone
+#       Properties:
+#           Name: dev.appmesh-latest-demo.dev
+#           HostedZoneConfig:
+#               Comment: Private hosted zone for resolving virtual-services
+
+Outputs:
+    AppMeshArn:
+        Value: !GetAtt Mesh.MeshName
+        Export:
+            Name: AppMeshArn  # This value can be consumed by a workload manifest or a workload addon.
