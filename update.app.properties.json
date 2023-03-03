@@ -1,6 +1,6 @@
 {
     "app_name": "demo-mesh-final",
     "env_name": "dev",
-    "traffic_weight_route1": 10,
+    "traffic_weight_route1": 20,
     "traffic_weight_route2": 90
 }

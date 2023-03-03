@@ -1,0 +1,69 @@
+Parameters:
+  App:
+    Type: String
+  Env:
+    Type: String
+  Name:
+    Type: String
+
+Resources:
+  TaskIamRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument: |
+        {
+            "Statement": [{
+                "Effect": "Allow",
+                "Principal": { "Service": [ "ecs-tasks.amazonaws.com" ]},
+                "Action": [ "sts:AssumeRole" ]
+            }]
+        }
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AWSAppMeshEnvoyAccess
+
+  AppMeshStreamAggregatedResourcesPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: "Allows appmesh:StreamAggregatedResources for two specific virtual nodes."
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action: "appmesh:StreamAggregatedResources"
+            Resource: '*'
+
+
+  TaskExecutionIamRole:
+    Type: AWS::IAM::Role
+    Properties:
+      Path: /
+      AssumeRolePolicyDocument: |
+        {
+            "Statement": [{
+                "Effect": "Allow",
+                "Principal": { "Service": [ "ecs-tasks.amazonaws.com" ]},
+                "Action": [ "sts:AssumeRole" ]
+            }]
+        }
+      ManagedPolicyArns:
+        - arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryReadOnly
+        - !Ref AppMeshStreamAggregatedResourcesPolicy
+
+
+Outputs:
+  TaskIamRoleArn:
+    Description: "The ARN of the Task IamRole to attach to the task role."
+    Value: !GetAtt TaskIamRole.Arn
+    Export:
+      Name: TaskIamRoleArn
+  TaskExecutionIamRoleArn:
+    Description: "Task Execution Role."
+    Value: !GetAtt TaskExecutionIamRole.Arn
+    Export:
+      Name: TaskExecutionIamRoleArn
+  AppMeshStreamAggregatedResourcesPolicyArn:
+    Description: "AppMesh Stream Resource Policy."
+    Value: !Ref AppMeshStreamAggregatedResourcesPolicy
+    Export: 
+      Name: AppMeshStreamAggregatedResourcesPolicyArn

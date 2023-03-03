@@ -1,0 +1,26 @@
+Parameters:
+  App:
+    Type: String
+  Env:
+    Type: String
+  Name:
+    Type: String
+
+Resources:
+  AppMeshStreamAggregatedResourcesPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      Description: "Allows appmesh:StreamAggregatedResources for two specific virtual nodes."
+      PolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action: "appmesh:StreamAggregatedResources"
+            Resource: '*'
+
+Outputs:
+  AppMeshStreamAggregatedResourcesPolicyArn:
+    Description: "AppMesh Stream Resource Policy."
+    Value: !Ref AppMeshStreamAggregatedResourcesPolicy
+    Export:
+      Name: appMeshStreamAggreatedResourcesPolicyForAppMeshGateway

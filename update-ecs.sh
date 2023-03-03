@@ -3,6 +3,8 @@ echo Error: update.app.properties.json, or app.properties.json File does not exi
 exit 1
 fi
 
+echo Starting the update script.
+echo
 cd_properties_file='update.app.properties.json'
 
 APP_NAME=$(jq -r '.app_name' $cd_properties_file)
@@ -24,6 +26,7 @@ yq -i '.Resources.Service1Route.Properties.Spec.HttpRoute.Action.WeightedTargets
 
 yq -i '.Resources.Service1Route.Properties.Spec.HttpRoute.Action.WeightedTargets[1].Weight = '$APPMESH_SERVICE_NODE2_TRAFFIC_WEIGHT'' $UPDATE_APP_MESH_SERVICES_FILE_PATH
 
+echo Deploying the app
+echo
 copilot deploy --name service1-v1 -e "$ENV_NAME"
-
 echo App Deployed.
