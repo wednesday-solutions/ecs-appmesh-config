@@ -13,7 +13,7 @@ export const init = () => {
 
   app.get('/', (req, res) => {
     try {
-      const message = 'Service 1 up and running!';
+      const message = 'Service 1 deployed with CD is up and running!';
       res.json({message});
     } catch (error) {
       throw new Error(error)
@@ -22,8 +22,8 @@ export const init = () => {
 
   app.get('/healthcheck', (req, res) => {
     try {
-      console.log('Service 1 is healthy.');
-      const message = 'Service 1 is healthy!';
+      console.log('Service 1.1 is healthy.');
+      const message = 'Service 1.1 is healthy!';
       res.json({message});
     } catch (error) {
       throw new Error(error)

@@ -1,0 +1,44 @@
+# Your service name will be used in naming your resources like log groups, ECS services, etc.
+name: service-gateway
+type: Load Balanced Web Service
+# Distribute traffic to your service.
+http:
+  # Requests to this path will be forwarded to your service.
+  # To match all requests you can use the "/" path.
+  path: '/'
+  # You can specify a custom health check path. The default is "/".
+  healthcheck:
+    path: '/server_info'
+    port: 9901
+    success_codes: '200'
+    healthy_threshold: 3
+    unhealthy_threshold: 2
+    interval: 15s
+    timeout: 10s
+    grace_period: 60s
+# Configuration for your containers and service.
+image:
+  location: 840364872350.dkr.ecr.ap-southeast-1.amazonaws.com/aws-appmesh-envoy:v1.25.1.0-prod
+  # Port exposed through your container to route traffic to it.
+  port: 9080
+  healthcheck:
+    command:
+      - 'CMD-SHELL'
+      - 'curl -s http://localhost:9901/server_info | grep state | grep -q LIVE'
+serviceDiscovery:
+  awsCloudMap:
+    namespace: dev.demo-mesh-final.local
+    name: gateway-service
+cpu: 256 # Number of CPU units for the task.
+memory: 512 # Amount of memory in MiB used by the task.
+count: 1 # Number of tasks that should be running in your service.
+exec: true # Enable running commands in your container.
+variables: # Requires to link AppMesh Virtual Node with the service.
+  APPMESH_VIRTUAL_NODE_NAME: mesh/demo-mesh-new-name/virtualGateway/demo-mesh-new-name-virtual-gateway
+taskdef_overrides:
+  - path: ContainerDefinitions[0].PortMappings
+    value:
+      - ContainerPort: 9901 # Envoy Admin Port.
+        Protocol: tcp
+      - ContainerPort: 9080 # Envoy Port to route traffic to Virtual Gateway.
+        Protocol: tcp

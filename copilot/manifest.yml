@@ -1,0 +1,64 @@
+# The manifest for the "service1v1" service.
+# Read the full specification for the "Backend Service" type at:
+#  https://aws.github.io/copilot-cli/docs/manifest/backend-service/
+
+# Your service name will be used in naming your resources like log groups, ECS services, etc.
+name: ""
+type: Backend Service
+# Configuration for your containers and service.
+image:
+  # Docker build arguments. For additional overrides: https://aws.github.io/copilot-cli/docs/manifest/backend-service/#image-build
+  build: ""
+  # Port exposed through your container to route traffic to it.
+  port: SERVICE1_PORT
+cpu: 256 # Number of CPU units for the task.
+memory: 512 # Amount of memory in MiB used by the task.
+count: 1 # Number of tasks that should be running in your service.
+exec: true # Enable running commands in your container.
+serviceDiscovery:
+  awsCloudMap:
+    namespace: ..local
+    name: ""
+sidecars:
+  envoy:
+    image: "" # Envoy Image
+    user: '1337' # Important (Enables AppMesh integration in Task Definition)
+    ulimits:
+      - name: "nofile"
+        hardLimit: 15000
+        softLimit: 15000
+    healthcheck: # Healthcheck for the Envoy sidecar proxy
+      command:
+        - 'CMD-SHELL'
+        - 'curl -s http://localhost:9901/server_info | grep state | grep -q LIVE'
+      interval: 5s
+      timeout: 10s
+      retries: 10
+    variables: # Requires to link AppMesh Virtual Node with the service.
+      # ENVOY_LOG_LEVEL: debug
+      APPMESH_VIRTUAL_NODE_NAME: mesh//virtualNode/--vn-1
+variables: # Requires to link AppMesh Virtual Node with the service.
+  # ENVOY_LOG_LEVEL: debug
+  APPMESH_VIRTUAL_NODE_NAME: mesh//virtualNode/--vn-1
+taskdef_overrides:
+  - path: ContainerDefinitions[0].DependsOn[0] # Service is dependent on Sidecar proxy to be healthy
+    value:
+      containerName: "envoy"
+      condition: "HEALTHY"
+  - path: ContainerDefinitions[1].User
+    value: "1337"
+  - path: ProxyConfiguration # Proxy configuration for the service
+    value:
+      ContainerName: "envoy"
+      Type: "APPMESH"
+      ProxyConfigurationProperties:
+        - Name: IgnoredUID
+          Value: '1337'
+        - Name: ProxyIngressPort
+          Value: '15000'
+        - Name: ProxyEgressPort
+          Value: '15001'
+        - Name: AppPorts
+          Value: '3001'
+        - Name: EgressIgnoredIPs
+          Value: '169.254.170.2,169.254.169.254'
