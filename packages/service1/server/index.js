@@ -13,7 +13,7 @@ export const init = () => {
 
   app.get('/', (req, res) => {
     try {
-      const message = 'Service 1 deployed with CD is up and running!';
+      const message = 'Service 1 is up and running, updated testing CD !!!';
       res.json({message});
     } catch (error) {
       throw new Error(error)
