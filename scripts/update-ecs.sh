@@ -41,7 +41,7 @@ if [ $SWITCH_LATEST_STABLE_ONCE ]; then
 
    yq -i 'del(.image.build)' $UPDATE_SERVICE_MANIFEST_FILE_PATH
 
-   yq -i '.image.location = '$AWS_ECR_SERVICE1_NEW_IMAGE'' $UPDATE_SERVICE_MANIFEST_FILE_PATH
+   yq -i '.image.location = "'$AWS_ECR_SERVICE1_NEW_IMAGE'"' $UPDATE_SERVICE_MANIFEST_FILE_PATH
 
    # Updating the addons create appmesh services file for service1
    UPDATE_APP_MESH_SERVICES_FILE_PATH=copilot/service1-v1/addons/3-create-services.yml
@@ -70,8 +70,9 @@ if [ $SWITCH_LATEST_STABLE_ONCE ]; then
    echo
    echo File updated
    exit 0
-elif [[ $USER_INPUT -gt 0 && $USER_INPUT -lt 10 ]]; then
+elif $SWITCH_LATEST_STABLE; then
    echo "Valid 1 digit number entered"
+fi
 
 echo 'Not here.'
 # Updating the addons create appmesh services file for service1
