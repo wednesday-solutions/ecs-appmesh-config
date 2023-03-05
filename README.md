@@ -28,16 +28,7 @@ Assuming you have all the tools mentioned above installed and configured. So Let
 
 #
 ## Setting up the repo:
-- Clone the repo.
-- Run `yarn` to install all the dependencies. 
-- Add .env to packages:
- - Run this command from the root of this directory \
- `cp packages/service1/env.example packages/service1/.env.production && cp packages/service2/env.example packages/service2/.env.production` \
-    to add `.env.production` files in your apps
- - Run this command from the root of this directory \
- `cp packages/service1/env.example packages/service1/.env.local && cp packages/service2/env.example packages/service2/.env.local`\
-    to add `.env.local` files in your apps
- - Please update PORT variable in both of the .env files
+- Run the folling command to setup the repo `./scripts/init.sh`
 #
 ## Starting locally:
 - Use `lerna run start:local` to run both the services in the packages directory
@@ -52,8 +43,7 @@ Please follow these steps to deploy the services on AWS ECS and AWS AppMesh.
     - To get Envoy Image for your particular region check here [Envoy Image](https://docs.aws.amazon.com/app-mesh/latest/userguide/envoy.html).
     - Please provide a relative path for the docker file and make sure you have the port exposed from the docker file.  
     - Value for service name must start with a letter, contain only lower-case letters, numbers, and hyphens, and have no consecutive or trailing hyphen.
-    - Please check the [Prerequisites](#prerequisites) before going ahead.
-- run the `./deploy.sh` script and let the magic happen.
+- run the `./scripts/deploy.sh` script and let the magic happen.
 #
 ## Curious about how this magic is happening, what architecure it will setup? Here's what and how.
 ![Architecure.png](AppMesh.png)

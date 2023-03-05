@@ -3,3 +3,4 @@ node_modules/
 packages/*/node_modules
 packages/*/.env*
 app.properties.json
+aws.secrets

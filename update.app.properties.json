@@ -1,6 +1,10 @@
 {
-    "app_name": "demo-mesh-final",
-    "env_name": "dev",
-    "traffic_weight_route1": 20,
-    "traffic_weight_route2": 90
+  "app_name": "demo-mesh-final",
+  "env_name": "dev",
+  "traffic_weight_route1": 20,
+  "traffic_weight_route2": 90,
+  "switchLatestStableOnce": false,
+  "setLatestStable": true,
+  "service1_name": "service1-v1",
+  "service2_name": "service1-v2"
 }
