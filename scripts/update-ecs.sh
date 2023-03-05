@@ -14,7 +14,7 @@ fi
 
 echo Starting the update script.
 echo
-cd_properties_file='update.app.properties.json'
+cd_properties_file='../update.app.properties.json'
 
 APP_NAME=$(jq -r '.app_name' $cd_properties_file)
 ENV_NAME=$(jq -r '.env_name' $cd_properties_file)
