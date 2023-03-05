@@ -1,5 +1,5 @@
 {
-    "app_name": "demo-mesh-final",
+    "app_name": "demo-mesh-final-cd",
     "env_name": "dev",
     "envoy_image": "840364872350.dkr.ecr.ap-southeast-1.amazonaws.com/aws-appmesh-envoy:v1.25.1.0-prod",
     "service1_name": "service1-v1",

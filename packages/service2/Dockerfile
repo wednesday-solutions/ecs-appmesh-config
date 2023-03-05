@@ -4,4 +4,4 @@ ADD . /app
 WORKDIR /app
 RUN yarn --frozen-lockfile
 CMD ["yarn", "run", "start:production"]
-EXPOSE 3001
+EXPOSE 3000

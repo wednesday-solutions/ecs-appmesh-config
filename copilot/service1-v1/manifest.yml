@@ -17,7 +17,7 @@ count: 1 # Number of tasks that should be running in your service.
 exec: true # Enable running commands in your container.
 serviceDiscovery:
   awsCloudMap:
-    namespace: dev.demo-mesh-final.local
+    namespace: dev.demo-mesh-final-cd.local
     name: service1-v1
 sidecars:
   envoy:

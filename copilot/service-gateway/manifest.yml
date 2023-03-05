@@ -27,7 +27,7 @@ image:
       - 'curl -s http://localhost:9901/server_info | grep state | grep -q LIVE'
 serviceDiscovery:
   awsCloudMap:
-    namespace: dev.demo-mesh-final.local
+    namespace: dev.demo-mesh-final-cd.local
     name: gateway-service
 cpu: 256 # Number of CPU units for the task.
 memory: 512 # Amount of memory in MiB used by the task.
