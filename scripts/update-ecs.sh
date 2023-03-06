@@ -15,7 +15,7 @@ echo ACCOUNT ID : $ACCOUNT_ID
 
 echo Starting the update script.
 echo
-cd_properties_file='update.app.properties.json'
+cd_properties_file='app.properties.json'
 
 APP_NAME=$(jq -r '.app_name' $cd_properties_file)
 ENV_NAME=$(jq -r '.env_name' $cd_properties_file)
@@ -66,24 +66,10 @@ if [ $SWITCH_LATEST_STABLE_ONCE ]; then
    echo
    echo App Deployed.
    echo
-   echo Updating app properties
-   yq -i '.setLatestStableOnce=false' ./update.app.properties.json -o json
-   echo
-   echo File updated
-elif $SWITCH_LATEST_STABLE; then
-   echo "Valid 1 digit number entered"
-else
-echo 'Not here.'
-# Updating the addons create appmesh services file for service1
-UPDATE_APP_MESH_SERVICES_FILE_PATH=copilot/service1-v1/addons/3-create-services.yml
-
-# Virtual Route traffic routing
-yq -i '.Resources.Service1Route.Properties.Spec.HttpRoute.Action.WeightedTargets[0].Weight = '$APPMESH_SERVICE_NODE1_TRAFFIC_WEIGHT'' $UPDATE_APP_MESH_SERVICES_FILE_PATH
-
-yq -i '.Resources.Service1Route.Properties.Spec.HttpRoute.Action.WeightedTargets[1].Weight = '$APPMESH_SERVICE_NODE2_TRAFFIC_WEIGHT'' $UPDATE_APP_MESH_SERVICES_FILE_PATH
-
-echo Deploying the app
-echo
-copilot deploy --name service1-v1 -e "$ENV_NAME"
-echo App Deployed.
+   if [ $SWITCH_LATEST_STABLE_ONCE ]; then
+      echo Updating app properties
+      yq -i '.setLatestStableOnce=false' ./app.properties.json -o json
+      echo
+      echo File updated
+   fi
 fi

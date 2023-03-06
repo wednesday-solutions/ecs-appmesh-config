@@ -9,14 +9,14 @@
 ## Prerequisites:
 Please make sure you have the following tools installed in your system:
 - aws cli
-- aws copilot
+- aws copilot **(v1.25.0 and above)**
 - docker
 - nodejs
 - yarn
 - lerna
 
 **AWS tools**: If you do not have aws-cli and aws copilot already installed, or you don't know about these tools, don't worry we got you covered. \
-Please follow this tutorial [How to Use AWS Copilot](https://www.wednesday.is/writing-tutorials/aws-copilot). This tutorial will give you an understanding of how to setup AWS Copilot, and configure aws-cli and also will help you deploy services on ECS, after which it would be quite easy for you to set up and deploy services on AWS ECS in minutes, and will also help you follow along this guide.
+Please follow this tutorial [How to Use AWS Copilot](https://www.wednesday.is/writing-tutorials/aws-copilot). This tutorial will give you an understanding of how to setup AWS Copilot, and configure aws-cli and also will help you deploy services on ECS, after which it would be quite easy for you to set up and deploy services on AWS ECS in minutes, and will also help you follow along this guide.\
 
 **Other tools**: To install other mentioned tools I am adding their documentation where you can download and install the tools:\
 a) [docker](https://docs.docker.com/engine/install/)\
@@ -24,14 +24,16 @@ b) [nodejs](https://nodejs.org/en/download/)\
 c) [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#mac-stable)\
 d) [lerna](https://lerna.js.org/)
 
-Assuming you have all the tools mentioned above installed and configured. So Let's move forward.
+Assuming you have all the tools mentioned above installed and configured.\
+**Please check your copilot version is atleast 1.25.0 or greater.** \
+So Let's move forward.
 
 #
 ## Setting up the repo:
 - Run the folling command to setup the repo `./scripts/init.sh`
 #
 ## Starting locally:
-- Use `lerna run start:local` to run both the services in the packages directory
+- Use `lerna run start:local` to run server locally in the packages directory.
 #
 ## Deploy the app on ECS and AppMesh:
 Please follow these steps to deploy the services on AWS ECS and AWS AppMesh.

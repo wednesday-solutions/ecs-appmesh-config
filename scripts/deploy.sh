@@ -9,7 +9,8 @@ file_name='app.properties.json'
 # ECS Config
 APP_NAME=$(jq -r '.app_name' $file_name)
 ENV_NAME=$(jq -r '.env_name' $file_name)
-ENVOY_IMAGE=$(jq -r '.envoy_image' $file_name)
+AWS_REGION=$(jq -r '.aws_region' $file_name)
+ENVOY_IMAGE=840364872350.dkr.ecr.$AWS_REGION.amazonaws.com/aws-appmesh-envoy:v1.25.1.0-prod
 CLOUDMAP_NAMESPACE=$ENV_NAME.$APP_NAME.local # dev.app-mesh-final.local
 
 # Service 1
