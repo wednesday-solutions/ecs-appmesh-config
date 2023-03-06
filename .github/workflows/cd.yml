@@ -30,15 +30,37 @@ jobs:
       - name: Deploy ECS
         run: |
           ./scripts/update-ecs.sh ${{ secrets.AWS_REGION }}
-      
-      - uses: actions/checkout@v2
-      - name: Commit changes
+      # - uses: actions/checkout@v2
+      # - name: Commit changes
+      #   run: |
+      #     git config --global user.name 'nikhilleo10'
+      #     git config --global user.email 'nikhilleo10@users.noreply.github.com'
+      #     git add .
+      #     git commit -m "Updated weights and changes in app.properties"
+      #     git push    
+      - name: Set branch name
+        id: vars
+        run: echo ::set-output name=stage::${GITHUB_REF#refs/*/}
+
+      - name: Commit Changes
+        uses: EndBug/add-and-commit@v7
+        with:
+          author_name: Gitflow
+          author_email: nikhil.ramrakhyani@wednesday.is
+          message: 'Update badges'
+          add: '.'
+          push: false
+
+      - name: Git pull origin
         run: |
-          git config --global user.name 'nikhilleo10'
-          git config --global user.email 'nikhilleo10@users.noreply.github.com'
-          git add .
-          git commit -m "Updated weights and changes in app.properties"
-          git push      
+          git pull origin ${{ github.ref }}
+
+      - name: Pushing to a protected branch
+        uses: CasperWA/push-protected@v2
+        with:
+          token: ${{ secrets.PAT }}
+          branch: ${{ steps.vars.outputs.stage }}
+          unprotect_reviews: true  
   # push-on-github:
   #   name: Push on github
   #   runs-on: ubuntu-latest
