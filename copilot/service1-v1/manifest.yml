@@ -7,10 +7,9 @@ name: service1-v1
 type: Backend Service
 # Configuration for your containers and service.
 image:
-  # Docker build arguments. For additional overrides: https://aws.github.io/copilot-cli/docs/manifest/backend-service/#image-build
-  build: packages/service1/Dockerfile
   # Port exposed through your container to route traffic to it.
   port: 3000
+  location: 511522223657.dkr.ecr.ap-southeast-1.amazonaws.com/demo-mesh-final-cd/service1-v2:latest
 cpu: 256 # Number of CPU units for the task.
 memory: 512 # Amount of memory in MiB used by the task.
 count: 1 # Number of tasks that should be running in your service.

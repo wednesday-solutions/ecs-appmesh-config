@@ -67,9 +67,9 @@ Resources:
           Action:
             WeightedTargets:
               - VirtualNode: !GetAtt Service1v1VirtualNode.VirtualNodeName
-                Weight: 50
+                Weight: 20
               - VirtualNode: !GetAtt Service1v2VirtualNode.VirtualNodeName
-                Weight: 50
+                Weight: 90
 Outputs:
   Service1v1VirtualNode:
     Value: !Ref Service1v1VirtualNode
