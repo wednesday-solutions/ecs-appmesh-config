@@ -55,13 +55,13 @@ if [ $SWITCH_LATEST_STABLE_ONCE ]; then
    echo Deploying the services
    echo
    echo Deploying Service1 with Service2 image
-   # copilot deploy --name service1-v1 -e "$ENV_NAME"
+   copilot deploy --name service1-v1 -e "$ENV_NAME"
    echo
    echo Deployed Service 1
    echo
    echo Deploying Service2 with latest build
    echo
-   # copilot deploy --name service1-v2 -e "$ENV_NAME"
+   copilot deploy --name service1-v2 -e "$ENV_NAME"
    echo Deployed Service 2
    echo
    echo App Deployed.
@@ -84,6 +84,6 @@ yq -i '.Resources.Service1Route.Properties.Spec.HttpRoute.Action.WeightedTargets
 
 echo Deploying the app
 echo
-# copilot deploy --name service1-v1 -e "$ENV_NAME"
+copilot deploy --name service1-v1 -e "$ENV_NAME"
 echo App Deployed.
 fi
