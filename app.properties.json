@@ -11,6 +11,6 @@
   "app_mesh_name": "demo-mesh-new-name",
   "traffic_weight_route1": 50,
   "traffic_weight_route2": 50,
-  "setLatestStableOnce": true,
+  "setLatestStableOnce": false,
   "setLatestStable": true
 }
