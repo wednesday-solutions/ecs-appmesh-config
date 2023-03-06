@@ -47,7 +47,7 @@ jobs:
         with:
           author_name: Gitflow
           author_email: nikhil.ramrakhyani@wednesday.is
-          message: 'Update badges'
+          message: 'Updated weights, and app.properties.json [skip actions]'
           add: '.'
           push: false
 

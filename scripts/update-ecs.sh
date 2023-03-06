@@ -87,13 +87,3 @@ echo
 # copilot deploy --name service1-v1 -e "$ENV_NAME"
 echo App Deployed.
 fi
-# git status
-
-#   git config user.email "nikhil.ramrakhyani@wednesday.is"
-#   git config user.name "Nikhil"
-
-# git add .
-
-# git commit -m 'Updated weights, and app.properties.json'
-
-# git push origin main
