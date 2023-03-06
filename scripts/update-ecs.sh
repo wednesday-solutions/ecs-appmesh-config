@@ -1,5 +1,5 @@
-if [ ! -f "update.app.properties.json" ]; then
-echo Error: update.app.properties.json, or app.properties.json File does not exist
+if [ ! -f "app.properties.json" ]; then
+echo Error: app.properties.json, or app.properties.json File does not exist
 exit 1
 fi
 
@@ -29,7 +29,7 @@ SERVICE2_NAME=$(jq -r '.service2_name' $cd_properties_file)
 if [ ! $APP_NAME ] || [ ! $ENV_NAME ] || [ ! $APPMESH_SERVICE_NODE1_TRAFFIC_WEIGHT ] || 
    [ ! $APPMESH_SERVICE_NODE2_TRAFFIC_WEIGHT ] || [ ! $SWITCH_LATEST_STABLE_ONCE ] || [ ! $SWITCH_LATEST_STABLE ] || 
    [ ! $SERVICE1_NAME ] || [ ! $SERVICE1_NAME ]; then
-echo Error: Please check and verify that all the values in the update.app.properties.json are correctly filled, also please ensure that the values are in correct datatype
+echo Error: Please check and verify that all the values in the app.properties.json are correctly filled, also please ensure that the values are in correct datatype
 exit 1
 fi
 
