@@ -3,14 +3,15 @@ echo Error: update.app.properties.json, or app.properties.json File does not exi
 exit 1
 fi
 
-AWS_ACCESS_KEY_ID=$1
+AWS_REGION=$1
 
-AWS_REGION=$2
-
-if [ ! $AWS_ACCESS_KEY_ID ] || [ ! $AWS_REGION ]; then
-echo Error: No AWS Credentials set in the workflow, please verify the actions.
+if [ ! $AWS_REGION ]; then
+echo Error: No AWS region set in the workflow, please verify the actions.
 exit 1
 fi
+
+export ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
+echo ACCOUNT ID : $ACCOUNT_ID
 
 echo Starting the update script.
 echo
@@ -20,7 +21,7 @@ APP_NAME=$(jq -r '.app_name' $cd_properties_file)
 ENV_NAME=$(jq -r '.env_name' $cd_properties_file)
 APPMESH_SERVICE_NODE1_TRAFFIC_WEIGHT=$(jq -r '.traffic_weight_route1' $cd_properties_file)
 APPMESH_SERVICE_NODE2_TRAFFIC_WEIGHT=$(jq -r '.traffic_weight_route2' $cd_properties_file)
-SWITCH_LATEST_STABLE_ONCE=$(jq -r '.switchLatestStableOnce' $cd_properties_file)
+SWITCH_LATEST_STABLE_ONCE=$(jq -r '.setLatestStableOnce' $cd_properties_file)
 SWITCH_LATEST_STABLE=$(jq -r '.setLatestStable' $cd_properties_file)
 SERVICE1_NAME=$(jq -r '.service1_name' $cd_properties_file)
 SERVICE2_NAME=$(jq -r '.service2_name' $cd_properties_file)
@@ -37,7 +38,7 @@ if [ $SWITCH_LATEST_STABLE_ONCE ]; then
    # Updating the addons create appmesh services file for service1
    UPDATE_SERVICE_MANIFEST_FILE_PATH=copilot/service1-v1/manifest.yml
 
-   AWS_ECR_SERVICE1_NEW_IMAGE=$AWS_ACCESS_KEY_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$APP_NAME/$SERVICE2_NAME:latest
+   AWS_ECR_SERVICE1_NEW_IMAGE=$ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$APP_NAME/$SERVICE2_NAME:latest
 
    yq -i 'del(.image.build)' $UPDATE_SERVICE_MANIFEST_FILE_PATH
 
@@ -66,7 +67,7 @@ if [ $SWITCH_LATEST_STABLE_ONCE ]; then
    echo App Deployed.
    echo
    echo Updating app properties
-   yq -i '.switchLatestStableOnce=false' ./update.app.properties.json -o json
+   yq -i '.setLatestStableOnce=false' ./update.app.properties.json -o json
    echo
    echo File updated
    exit 0

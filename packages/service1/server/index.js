@@ -13,7 +13,7 @@ export const init = () => {
 
   app.get('/', (req, res) => {
     try {
-      const message = 'Service v1.2 is up and running, updated testing CD !!!';
+      const message = `Service is up and running, ServiceName: ${process.env.COPILOT_SERVICE_NAME}`;
       res.json({message});
     } catch (error) {
       throw new Error(error)
@@ -22,8 +22,8 @@ export const init = () => {
 
   app.get('/healthcheck', (req, res) => {
     try {
-      console.log('Service v1.2 is healthy.');
-      const message = 'Service 1.1 is healthy!';
+      console.log(`ServiceName ${process.env.COPILOT_SERVICE_NAME} is healthy.`);
+      const message = `ServiceName ${process.env.COPILOT_SERVICE_NAME} is healthy!`;
       res.json({message});
     } catch (error) {
       throw new Error(error)

@@ -29,13 +29,13 @@ jobs:
 
       - name: Deploy ECS
         run: |
-          ./scripts/update-ecs.sh ${{ secrets.AWS_ACCESS_KEY_ID }} ${{ secrets.AWS_REGION }}
+          ./scripts/update-ecs.sh ${{ secrets.AWS_REGION }}
   run:
     name: Push on github
     needs: deploy
     runs-on: ubuntu-latest
     steps:
-      - uses: EndBug/add-and-commit@v9
+      - uses: EndBug/add-and-commit@v7
         with:
           message: Updating app.properties and weights
           committer_name: GitHub Actions

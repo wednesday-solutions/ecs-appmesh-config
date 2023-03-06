@@ -3,7 +3,7 @@
     "env_name": "dev",
     "traffic_weight_route1": 10,
     "traffic_weight_route2": 90,
-    "switchLatestStableOnce": true,
+    "setLatestStableOnce": true,
     "setLatestStable": true,
     "service1_name": "service1-v1",
     "service2_name": "service1-v2"
