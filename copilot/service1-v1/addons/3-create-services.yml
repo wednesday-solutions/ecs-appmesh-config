@@ -21,7 +21,7 @@ Resources:
               Protocol: http
         ServiceDiscovery:
           DNS:
-            Hostname: service1-v1.dev.demo-mesh-final-cd.local
+            Hostname: service1-v1.dev.demo-mesh-final-working-flow.local
   Service1v2VirtualNode:
     Type: AWS::AppMesh::VirtualNode
     Properties:
@@ -34,12 +34,12 @@ Resources:
               Protocol: http
         ServiceDiscovery:
           DNS:
-            Hostname: service1-v2.dev.demo-mesh-final-cd.local
+            Hostname: service1-v2.dev.demo-mesh-final-working-flow.local
   Service1VirtualService:
     Type: AWS::AppMesh::VirtualService
     Properties:
       MeshName: !GetAtt Mesh.MeshName
-      VirtualServiceName: service1-v1.dev-demo-mesh-final-cd.local
+      VirtualServiceName: service1-v1.dev-demo-mesh-final-working-flow.local
       Spec:
         Provider:
           VirtualRouter:
@@ -67,9 +67,9 @@ Resources:
           Action:
             WeightedTargets:
               - VirtualNode: !GetAtt Service1v1VirtualNode.VirtualNodeName
-                Weight: 20
+                Weight: 50
               - VirtualNode: !GetAtt Service1v2VirtualNode.VirtualNodeName
-                Weight: 90
+                Weight: 50
 Outputs:
   Service1v1VirtualNode:
     Value: !Ref Service1v1VirtualNode

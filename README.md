@@ -47,5 +47,33 @@ Please follow these steps to deploy the services on AWS ECS and AWS AppMesh.
     - Value for service name must start with a letter, contain only lower-case letters, numbers, and hyphens, and have no consecutive or trailing hyphen.
 - run the `./scripts/deploy.sh` script and let the magic happen.
 #
+## Continuous deployment
+For Continuous deployment we are using GitHub actions. For making the CD work with the repo please follow the following steps:
+- Go through steps in the tutorial [Guide to Deploying Your App to ECS with Github Actions](https://www.wednesday.is/writing-tutorials/deploy-to-ecs-github-actions). Going through the tutorial will help you understand what generally happens under the hood when we use CD on ECS.
+- Add secrets in the GitHub repo [Add Secrets](https://www.wednesday.is/writing-tutorials/deploy-to-ecs-github-actions#toc-2), we need to add the following secret variables in the GitHub repo to make our CD pipeline work.
+    - AWS_ACCESS_KEY_ID
+    - AWS_REGION
+    - AWS_SECRET_ACCESS_KEY
+    - PAT
+- To get the values for above mention keys check the following docs:
+    - AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY
+        - Login to your AWS console
+        - Create a User Group named Administrators. Set the AdministratorAccess permission policy.
+        - Navigate to the Users tab and add a new user with username Administrator.
+        - Select the AWS Credential Type as Access Key - Programmatic access.
+        - Add the user to the Administrators group.
+        - Save the **access token ID** and the **secret access key**.
+    - AWS_REGION:
+        - Provide the region name where the app is deployed.
+    - PAT (Personal Access Token):
+        - Go to GitHub [settings](https://github.com/settings/profile).
+        - Go to developer settings.
+        - Click on Personal Access Token.
+        - Click on tokens (classic)
+        - Click on Generate new token, then Generate new token (classic).
+        - Give all the access to the Personal Access Token.
+- Once you have setup the secrets you are good to go.
+
+#
 ## Curious about how this magic is happening, what architecure it will setup? Here's what and how.
 ![Architecure.png](AppMesh.png)
