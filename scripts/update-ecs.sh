@@ -55,13 +55,13 @@ if [ $SWITCH_LATEST_STABLE_ONCE ]; then
    echo Deploying the services
    echo
    echo Deploying Service1 with Service2 image
-   copilot deploy --name service1-v1 -e "$ENV_NAME"
+   # copilot deploy --name service1-v1 -e "$ENV_NAME"
    echo
    echo Deployed Service 1
    echo
    echo Deploying Service2 with latest build
    echo
-   copilot deploy --name service1-v2 -e "$ENV_NAME"
+   # copilot deploy --name service1-v2 -e "$ENV_NAME"
    echo Deployed Service 2
    echo
    echo App Deployed.
@@ -70,11 +70,9 @@ if [ $SWITCH_LATEST_STABLE_ONCE ]; then
    yq -i '.setLatestStableOnce=false' ./update.app.properties.json -o json
    echo
    echo File updated
-   exit 0
 elif $SWITCH_LATEST_STABLE; then
    echo "Valid 1 digit number entered"
-fi
-
+else
 echo 'Not here.'
 # Updating the addons create appmesh services file for service1
 UPDATE_APP_MESH_SERVICES_FILE_PATH=copilot/service1-v1/addons/3-create-services.yml
@@ -86,5 +84,16 @@ yq -i '.Resources.Service1Route.Properties.Spec.HttpRoute.Action.WeightedTargets
 
 echo Deploying the app
 echo
-copilot deploy --name service1-v1 -e "$ENV_NAME"
+# copilot deploy --name service1-v1 -e "$ENV_NAME"
 echo App Deployed.
+fi
+git status
+
+  git config user.email "nikhil.ramrakhyani@wednesday.is"
+  git config user.name "Nikhil"
+
+git add .
+
+git commit -m 'Updated weights, and app.properties.json'
+
+git push origin main

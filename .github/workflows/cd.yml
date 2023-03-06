@@ -30,13 +30,54 @@ jobs:
       - name: Deploy ECS
         run: |
           ./scripts/update-ecs.sh ${{ secrets.AWS_REGION }}
-  run:
-    name: Push on github
-    needs: deploy
-    runs-on: ubuntu-latest
-    steps:
-      - uses: EndBug/add-and-commit@v7
-        with:
-          message: Updating app.properties and weights
-          committer_name: GitHub Actions
-          committer_email: actions@github.com
+      
+      - uses: actions/checkout@v2
+      - name: Commit changes
+        run: |
+          git config --global user.name 'nikhilleo10'
+          git config --global user.email 'nikhilleo10@users.noreply.github.com'
+          git add .
+          git commit -m "Updated weights and changes in app.properties"
+          git push      
+  # push-on-github:
+  #   name: Push on github
+  #   runs-on: ubuntu-latest
+  #   needs: deploy
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Commit changes
+  #       run: |
+  #         git config --global user.name 'nikhilleo10'
+  #         git config --global user.email 'nikhilleo10@users.noreply.github.com'
+  #         git commit -am "Updated weights and changes in app.properties"
+  #         git push
+  # push-on-protected:
+  #   needs: deploy
+  #   runs-on: ubuntu-latest
+  #   name: Push to protected branch
+  #   steps:
+  #   - name: Checkout local repository
+  #     uses: actions/checkout@v3
+
+  #   - name: Push to protected branch
+  #     uses: CasperWA/push-protected@v2
+  #     with:
+  #       token: ${{ secrets.PAT }}
+  #       branch: main
+  #       unprotect_reviews: true
+
+  # push-on-github:
+  #   name: Push on github
+  #   runs-on: ubuntu-latest
+  #   needs: deploy
+  #   permissions:
+  #     # Give the default GITHUB_TOKEN write permission to commit and push the
+  #     # added or changed files to the repository.
+  #     contents: write
+
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #       with:
+  #         token: ${{ secrets.PAT }}
+  #     # Commit all changed files back to the repository
+  #     - uses: stefanzweifel/git-auto-commit-action@v4
