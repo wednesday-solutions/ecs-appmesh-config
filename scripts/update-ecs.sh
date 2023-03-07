@@ -73,6 +73,8 @@ if $SWITCH_LATEST_STABLE_ONCE || $SWITCH_LATEST_STABLE; then
    fi
 else
    # Virtual Route traffic routing
+   UPDATE_APP_MESH_SERVICES_FILE_PATH=copilot/service1-v1/addons/3-create-services.yml
+   
    yq -i '.Resources.Service1Route.Properties.Spec.HttpRoute.Action.WeightedTargets[0].Weight =    '$APPMESH_SERVICE_NODE1_TRAFFIC_WEIGHT'' $UPDATE_APP_MESH_SERVICES_FILE_PATH
 
    yq -i '.Resources.Service1Route.Properties.Spec.HttpRoute.Action.WeightedTargets[1].Weight = '$APPMESH_SERVICE_NODE2_TRAFFIC_WEIGHT'' $UPDATE_APP_MESH_SERVICES_FILE_PATH
