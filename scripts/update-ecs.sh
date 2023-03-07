@@ -11,7 +11,6 @@ exit 1
 fi
 
 export ACCOUNT_ID=$(aws sts get-caller-identity --query 'Account' --output text)
-echo ACCOUNT ID : $ACCOUNT_ID
 
 echo Starting the update script.
 echo
@@ -33,7 +32,7 @@ echo Error: Please check and verify that all the values in the app.properties.js
 exit 1
 fi
 
-if [ $SWITCH_LATEST_STABLE_ONCE ]; then
+if $SWITCH_LATEST_STABLE_ONCE || $SWITCH_LATEST_STABLE; then
    echo 'Updating Service1 with Service2 latest image, Switch Latest Stable Once'
    # Updating the addons create appmesh services file for service1
    UPDATE_SERVICE_MANIFEST_FILE_PATH=copilot/service1-v1/manifest.yml
@@ -66,10 +65,21 @@ if [ $SWITCH_LATEST_STABLE_ONCE ]; then
    echo
    echo App Deployed.
    echo
-   if [ $SWITCH_LATEST_STABLE_ONCE ]; then
+   if $SWITCH_LATEST_STABLE_ONCE; then
       echo Updating app properties
       yq -i '.setLatestStableOnce=false' ./app.properties.json -o json
       echo
       echo File updated
    fi
+else
+   # Virtual Route traffic routing
+   yq -i '.Resources.Service1Route.Properties.Spec.HttpRoute.Action.WeightedTargets[0].Weight =    '$APPMESH_SERVICE_NODE1_TRAFFIC_WEIGHT'' $UPDATE_APP_MESH_SERVICES_FILE_PATH
+
+   yq -i '.Resources.Service1Route.Properties.Spec.HttpRoute.Action.WeightedTargets[1].Weight = '$APPMESH_SERVICE_NODE2_TRAFFIC_WEIGHT'' $UPDATE_APP_MESH_SERVICES_FILE_PATH
+
+   echo Routing traffic between services
+   echo
+   copilot deploy --name service1-v1 -e "$ENV_NAME"
+   echo App Deployed.
+   echo
 fi

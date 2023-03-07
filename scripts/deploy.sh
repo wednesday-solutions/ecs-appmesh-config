@@ -21,8 +21,6 @@ SERVICE1_DNS_DISCOVERY_ENDPOINT=$SERVICE1_NAME.$ENV_NAME.$APP_NAME.local
 
 # Service 2
 SERVICE2_NAME=$(jq -r '.service2_name' $file_name)
-SERVICE2_PORT=$(jq -r '.service2_port' $file_name)
-SERVICE2_DOCKER_IMAGE_PATH=$(jq -r '.service2_docker_image_path' $file_name)
 SERVICE2_DNS_DISCOVERY_ENDPOINT=$SERVICE2_NAME.$ENV_NAME.$APP_NAME.local
 
 # AppMesh config
@@ -31,8 +29,8 @@ TRAFFIC_VIRTUAL_NODE1=$(jq -r '.traffic_weight_route1' $file_name)
 TRAFFIC_VIRTUAL_NODE2=$(jq -r '.traffic_weight_route2' $file_name)
 
 if [ ! $APP_NAME ] || [ ! $ENV_NAME ] || [ ! $ENVOY_IMAGE ] || [ ! $CLOUDMAP_NAMESPACE ] || [ ! $SERVICE1_NAME ] || [ ! $SERVICE1_PORT ] || 
-   [ ! $SERVICE1_DOCKER_IMAGE_PATH ] || [ ! $SERVICE1_DNS_DISCOVERY_ENDPOINT ] || [ ! $SERVICE2_NAME ] || [ ! $SERVICE2_PORT ] ||  
-   [ ! $SERVICE2_DOCKER_IMAGE_PATH ] || [ ! $SERVICE2_DNS_DISCOVERY_ENDPOINT ] || [ ! $MESH_NAME ] || [ ! $TRAFFIC_VIRTUAL_NODE2 ] ||  
+   [ ! $SERVICE1_DOCKER_IMAGE_PATH ] || [ ! $SERVICE1_DNS_DISCOVERY_ENDPOINT ] || [ ! $SERVICE2_NAME ] ||  
+   [ ! $SERVICE2_DNS_DISCOVERY_ENDPOINT ] || [ ! $MESH_NAME ] || [ ! $TRAFFIC_VIRTUAL_NODE2 ] ||  
    [ ! $TRAFFIC_VIRTUAL_NODE1 ]; then
 echo Error: Please check and verify that all the values in the app.properties.json are correctly filled, also please ensure that the values are in correct datatype
 exit 1
@@ -53,7 +51,7 @@ APPMESH_SERVICE_NODE1_ENV_NODE_NAME=mesh/$MESH_NAME/virtualNode/$APPMESH_SERVICE
 
 # Service1v2 (NODE2 represents service1 version 2)
 APPMESH_SERVICE_VIRTUAL_NODE2_NAME=$MESH_NAME-$SERVICE2_NAME-vn-2
-APPMESH_SERVICE_VIRTUAL_NODE2_PORT=$SERVICE2_PORT
+APPMESH_SERVICE_VIRTUAL_NODE2_PORT=$SERVICE1_PORT
 APPMESH_SERVICE_NODE2_TRAFFIC_WEIGHT=$TRAFFIC_VIRTUAL_NODE2
 APPMESH_SERVICE_NODE2_ENV_NODE_NAME=mesh/$MESH_NAME/virtualNode/$APPMESH_SERVICE_VIRTUAL_NODE2_NAME
 
@@ -164,7 +162,7 @@ echo "Deployed Service"
 echo
 # Initializing new service
 echo "Initializing service $SERVICE2_NAME"
-copilot svc init --name $SERVICE2_NAME --svc-type "Backend Service" --dockerfile $SERVICE2_DOCKER_IMAGE_PATH
+copilot svc init --name $SERVICE2_NAME --svc-type "Backend Service" --dockerfile $SERVICE1_DOCKER_IMAGE_PATH
 echo
 rm -rf copilot/$SERVICE2_NAME/manifest.yml
 
@@ -176,9 +174,9 @@ SERVICE2_MANIFEST_FILE_PATH=copilot/$SERVICE2_NAME/manifest.yml
 
 yq -i '.name = "'$SERVICE2_NAME'"' $SERVICE2_MANIFEST_FILE_PATH
 
-yq -i '.image.build = "'$SERVICE2_DOCKER_IMAGE_PATH'"' $SERVICE2_MANIFEST_FILE_PATH
+yq -i '.image.build = "'$SERVICE1_DOCKER_IMAGE_PATH'"' $SERVICE2_MANIFEST_FILE_PATH
 
-yq -i '.image.port = '$SERVICE2_PORT'' $SERVICE2_MANIFEST_FILE_PATH
+yq -i '.image.port = '$SERVICE1_PORT'' $SERVICE2_MANIFEST_FILE_PATH
 
 yq -i '.serviceDiscovery.awsCloudMap.namespace = "'$CLOUDMAP_NAMESPACE'"' $SERVICE2_MANIFEST_FILE_PATH
 
