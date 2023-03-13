@@ -117,25 +117,22 @@ For Continuous deployment, we are using GitHub actions. For making the CD work w
 #
 
 ## AWS AppMesh Pricing:
-App Mesh is a managed service that is offered for free. So no cost for managing App Mesh resources.
-As we are using AWS ECS to deploy our applications on Fargate, I believe the Fargate resources will incur costs.
+App Mesh is a free managed service, meaning there are no costs associated with managing App Mesh resources. However, as we are utilizing AWS ECS to deploy our applications on Fargate, Fargate resources will incur costs.
 
-Now when we want to introduce AppMesh, we would run Envoy proxy sidecar container in addition to our application container. This is similar to running any sidecars such as xray, cloudwatch etc. containers. So in our task you would have to allocate +0.25 vCPU & +0.5 GB memory to account for Envoy container. So that will be the additional cost of running your application in App Mesh service mesh.
+When introducing AppMesh, we need to run the Envoy proxy sidecar container in addition to our application container. This is similar to running any sidecars such as xray, cloudwatch, etc. containers. In our task, you will have to allocate +0.25 vCPU & +0.5 GB memory to account for the Envoy container. Therefore, there will be an additional cost of running your application in the App Mesh service mesh.
 
-And for Virtual Gateway we would not be running an application but a dedicated Envoy container as a whole. So let’s say you allocate 2 vCPU & 1 GB memory for Virtual Gateway Envoy then we would have to bear the Fargate cost of running those tasks.
+For Virtual Gateway, we will not be running an application but a dedicated Envoy container as a whole. If we allocate 2 vCPU & 1 GB memory for Virtual Gateway Envoy, we will have to bear the Fargate cost of running those tasks.
 
-So I will give you an estimate for running the above architecture on AWS. Let's breakdown what services we have and what is the cost for running these. 
+Therefore, I will provide you with an estimate of running the above architecture on AWS. Let's breakdown the services and the cost of running them.
 
-Considering the below architecture in **Asia Pacific (Mumbai)** region.	
+We will consider the following architecture in the **Asia Pacific (Mumbai)** region, using the following specifications:
 - Operating system (Linux)
 - CPU Architecture (x86)
-- Average duration (24hours) **(Enter the time period for which your tasks or pods are running. Pricing is per second with a 1-minute minimum (Linux) and a 15-minute minimum (Windows). Duration is calculated from the time you start to download your container image (docker pull) until the Task or Pod terminates, rounded up to the nearest second.
-)**
+- Average duration (24 hours) **(duration is calculated from the time you start to download your container image until the Task or Pod terminates, rounded up to the nearest second)**
 - Number of tasks or pods (3 per day)
 - Amount of memory allocated for each task or pod (1 GB)
-- Amount of ephemeral storage allocated for Amazon ECS (20 GB) **(The first 20 GB are at no additional charge, you only pay for any additional storage that you configure for the Task)**
+- Amount of ephemeral storage allocated for Amazon ECS (20 GB) **(the first 20 GB are at no additional charge, you only pay for any additional storage that you configure for the Task)**
 
-Number of tasks is 3 because we are running 3 services and 1 task in each service. From 3 services, 2 services contain application i.e service1v1 (stable version) and service1v2 (latest build) and 1 service is responsible for running AWS App Mesh Virtual Gateway Envoy proxy. So the cost of running these services is around **56.79 USD/month** and **681.48 USD/year** which includes upfront cost. 
+Since we are running 3 services and 1 task in each service, the number of tasks is 3. Out of 3 services, 2 services contain an application, i.e., service1v1 (stable version) and service1v2 (latest build), and 1 service is responsible for running the AWS App Mesh Virtual Gateway Envoy proxy. Therefore, the cost of running these services is around **56.79 USD/month** and **681.48 USD/year**, which includes upfront costs.
 
-Note: **The cost for running these services may vary from region to region.**
-#
+Note: **The cost of running these services may vary from region to region.**
