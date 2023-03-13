@@ -9,6 +9,7 @@
 * [Starting locally](#starting-locally)
 * [Deploy the app on ECS and AppMesh](#deploy-the-app-on-ecs-and-appmesh)
 * [Continuous deployment](#continuous-deployment)
+* [AWS AppMesh Pricing](#aws-appmesh-pricing)
 #
 ## Prerequisites:
 Please make sure you have the following tools installed in your system:
@@ -133,6 +134,6 @@ We will consider the following architecture in the **Asia Pacific (Mumbai)** reg
 - Amount of memory allocated for each task or pod (1 GB)
 - Amount of ephemeral storage allocated for Amazon ECS (20 GB) **(the first 20 GB are at no additional charge, you only pay for any additional storage that you configure for the Task)**
 
-Since we are running 3 services and 1 task in each service, the number of tasks is 3. Out of 3 services, 2 services contain an application, i.e., service1v1 (stable version) and service1v2 (latest build), and 1 service is responsible for running the AWS App Mesh Virtual Gateway Envoy proxy. Therefore, the cost of running these services is around **56.79 USD/month** and **681.48 USD/year**, which includes upfront costs.
+Since we are running 3 services and 1 task in each service, the number of tasks is 3. Out of 3 services, 2 services contain an application, i.e service1v1 (stable version) and service1v2 (latest build), and 1 service is responsible for running the AWS App Mesh Virtual Gateway Envoy proxy. Therefore, the cost of running these services is around **56.79 USD/month** and **681.48 USD/year**, which includes upfront costs.
 
 Note: **The cost of running these services may vary from region to region.**
