@@ -1,6 +1,6 @@
 # App Mesh and ECS
 ## Architecture.
-![Architecure.png](App Mesh.png)
+![Architecure.png](App%20Mesh.png)
 #
 ## Table of contents
 * [Prerequisites](#prerequisites)
